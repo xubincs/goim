@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	log "github.com/golang/glog"
+	"github.com/Terry-Mao/goim/log"
 )
 
 func TestTimer(t *testing.T) {

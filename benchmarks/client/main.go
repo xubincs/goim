@@ -19,7 +19,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	log "github.com/golang/glog"
+	"github.com/Terry-Mao/goim/log"
 )
 
 const (

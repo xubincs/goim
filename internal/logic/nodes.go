@@ -7,7 +7,7 @@ import (
 	"github.com/bilibili/discovery/naming"
 	pb "github.com/Terry-Mao/goim/api/logic/grpc"
 	"github.com/Terry-Mao/goim/internal/logic/model"
-	log "github.com/golang/glog"
+	"github.com/Terry-Mao/goim/log"
 )
 
 // NodesInstances get servers info.

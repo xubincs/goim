@@ -9,11 +9,10 @@ import (
 	"time"
 
 	"github.com/Terry-Mao/goim/api/comet/grpc"
-	"github.com/Terry-Mao/goim/internal/comet/conf"
+	"github.com/Terry-Mao/goim/log"
 	"github.com/Terry-Mao/goim/pkg/bytes"
 	xtime "github.com/Terry-Mao/goim/pkg/time"
 	"github.com/Terry-Mao/goim/pkg/websocket"
-	log "github.com/golang/glog"
 )
 
 // InitWebsocket listen all tcp.bind and start accept connections.
@@ -138,12 +137,11 @@ func serveWebsocket(s *Server, conn net.Conn, r int) {
 		rp = s.round.Reader(r)
 		wp = s.round.Writer(r)
 	)
-	if conf.Conf.Debug {
-		// ip addr
-		lAddr := conn.LocalAddr().String()
-		rAddr := conn.RemoteAddr().String()
-		log.Infof("start tcp serve \"%s\" with \"%s\"", lAddr, rAddr)
-	}
+
+	lAddr := conn.LocalAddr().String()
+	rAddr := conn.RemoteAddr().String()
+	log.Debugf("start tcp serve \"%s\" with \"%s\"", lAddr, rAddr)
+
 	s.ServeWebsocket(conn, rp, wp, tr)
 }
 
@@ -211,9 +209,7 @@ func (s *Server) ServeWebsocket(conn net.Conn, rp, wp *bytes.Pool, tr *xtime.Tim
 			ch.Watch(accepts...)
 			b = s.Bucket(ch.Key)
 			err = b.Put(rid, ch)
-			if conf.Conf.Debug {
-				log.Infof("websocket connnected key:%s mid:%d proto:%+v", ch.Key, ch.Mid, p)
-			}
+			log.Debugf("websocket connnected key:%s mid:%d proto:%+v", ch.Key, ch.Mid, p)
 		}
 	}
 	step = 4
@@ -260,9 +256,7 @@ func (s *Server) ServeWebsocket(conn net.Conn, rp, wp *bytes.Pool, tr *xtime.Tim
 					lastHB = now
 				}
 			}
-			if conf.Conf.Debug {
-				log.Infof("websocket heartbeat receive key:%s, mid:%d", ch.Key, ch.Mid)
-			}
+			log.Debugf("websocket heartbeat receive key:%s, mid:%d", ch.Key, ch.Mid)
 			step++
 		} else {
 			if err = s.Operate(ctx, p, ch, b); err != nil {
@@ -295,9 +289,7 @@ func (s *Server) ServeWebsocket(conn net.Conn, rp, wp *bytes.Pool, tr *xtime.Tim
 	if white {
 		whitelist.Printf("key: %s disconnect error(%v)\n", ch.Key, err)
 	}
-	if conf.Conf.Debug {
-		log.Infof("websocket disconnected key: %s mid:%d", ch.Key, ch.Mid)
-	}
+	log.Debugf("websocket disconnected key: %s mid:%d", ch.Key, ch.Mid)
 }
 
 // dispatch accepts connections on the listener and serves requests
@@ -310,9 +302,7 @@ func (s *Server) dispatchWebsocket(ws *websocket.Conn, wp *bytes.Pool, wb *bytes
 		online int32
 		white  = whitelist.Contains(ch.Mid)
 	)
-	if conf.Conf.Debug {
-		log.Infof("key: %s start dispatch tcp goroutine", ch.Key)
-	}
+	log.Debugf("key: %s start dispatch tcp goroutine", ch.Key)
 	for {
 		if white {
 			whitelist.Printf("key: %s wait proto ready\n", ch.Key)
@@ -321,17 +311,13 @@ func (s *Server) dispatchWebsocket(ws *websocket.Conn, wp *bytes.Pool, wb *bytes
 		if white {
 			whitelist.Printf("key: %s proto ready\n", ch.Key)
 		}
-		if conf.Conf.Debug {
-			log.Infof("key:%s dispatch msg:%s", ch.Key, p.Body)
-		}
+		log.Debugf("key:%s dispatch msg:%s", ch.Key, p.Body)
 		switch p {
 		case grpc.ProtoFinish:
 			if white {
 				whitelist.Printf("key: %s receive proto finish\n", ch.Key)
 			}
-			if conf.Conf.Debug {
-				log.Infof("key: %s wakeup exit dispatch goroutine", ch.Key)
-			}
+			log.Debugf("key: %s wakeup exit dispatch goroutine", ch.Key)
 			finish = true
 			goto failed
 		case grpc.ProtoReady:
@@ -371,9 +357,7 @@ func (s *Server) dispatchWebsocket(ws *websocket.Conn, wp *bytes.Pool, wb *bytes
 			if white {
 				whitelist.Printf("key: %s write server proto%v\n", ch.Key, p)
 			}
-			if conf.Conf.Debug {
-				log.Infof("websocket sent a message key:%s mid:%d proto:%+v", ch.Key, ch.Mid, p)
-			}
+			log.Debugf("websocket sent a message key:%s mid:%d proto:%+v", ch.Key, ch.Mid, p)
 		}
 		if white {
 			whitelist.Printf("key: %s start flush \n", ch.Key)
@@ -399,9 +383,7 @@ failed:
 	for !finish {
 		finish = (ch.Ready() == grpc.ProtoFinish)
 	}
-	if conf.Conf.Debug {
-		log.Infof("key: %s dispatch goroutine exit", ch.Key)
-	}
+	log.Debugf("key: %s dispatch goroutine exit", ch.Key)
 }
 
 // auth for goim handshake with client, use rsa & aes.

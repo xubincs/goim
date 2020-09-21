@@ -5,7 +5,6 @@ require (
 	github.com/Shopify/sarama v1.19.0 // indirect
 	github.com/bilibili/discovery v1.0.1
 	github.com/bsm/sarama-cluster v2.1.15+incompatible
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/eapache/go-resiliency v1.1.0 // indirect
 	github.com/eapache/go-xerial-snappy v0.0.0-20180814174437-776d5712da21 // indirect
 	github.com/eapache/queue v1.1.0 // indirect
@@ -20,6 +19,7 @@ require (
 	github.com/pierrec/lz4 v2.0.5+incompatible // indirect
 	github.com/pkg/errors v0.8.0
 	github.com/rcrowley/go-metrics v0.0.0-20181016184325-3113b8401b8a // indirect
+	github.com/sirupsen/logrus v1.6.0
 	github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d // indirect
 	github.com/smartystreets/goconvey v0.0.0-20180222194500-ef6db91d284a
 	github.com/stretchr/testify v1.3.0
@@ -45,3 +45,5 @@ replace (
 	google.golang.org/genproto => github.com/google/go-genproto v0.0.0-20180817151627-c66870c02cf8
 	google.golang.org/grpc => github.com/grpc/grpc-go v1.16.0
 )
+
+go 1.13

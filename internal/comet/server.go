@@ -7,7 +7,7 @@ import (
 
 	logic "github.com/Terry-Mao/goim/api/logic/grpc"
 	"github.com/Terry-Mao/goim/internal/comet/conf"
-	log "github.com/golang/glog"
+	"github.com/Terry-Mao/goim/log"
 	"github.com/zhenjl/cityhash"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/balancer/roundrobin"
@@ -88,9 +88,7 @@ func (s *Server) Buckets() []*Bucket {
 // Bucket get the bucket by subkey.
 func (s *Server) Bucket(subKey string) *Bucket {
 	idx := cityhash.CityHash32([]byte(subKey), uint32(len(subKey))) % s.bucketIdx
-	if conf.Conf.Debug {
-		log.Infof("%s hit channel bucket index: %d use cityhash", subKey, idx)
-	}
+	log.Debugf("%s hit channel bucket index: %d use cityhash", subKey, idx)
 	return s.buckets[idx]
 }
 

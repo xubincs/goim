@@ -14,14 +14,14 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/bilibili/discovery/naming"
-	resolver "github.com/bilibili/discovery/naming/grpc"
 	"github.com/Terry-Mao/goim/internal/comet"
 	"github.com/Terry-Mao/goim/internal/comet/conf"
 	"github.com/Terry-Mao/goim/internal/comet/grpc"
 	md "github.com/Terry-Mao/goim/internal/logic/model"
+	"github.com/Terry-Mao/goim/log"
 	"github.com/Terry-Mao/goim/pkg/ip"
-	log "github.com/golang/glog"
+	"github.com/bilibili/discovery/naming"
+	"github.com/bilibili/discovery/naming/grpc"
 )
 
 const (
@@ -36,7 +36,7 @@ func main() {
 	}
 	rand.Seed(time.Now().UTC().UnixNano())
 	runtime.GOMAXPROCS(runtime.NumCPU())
-	println(conf.Conf.Debug)
+	log.Init(conf.Conf.Debug)
 	log.Infof("goim-comet [version: %s env: %+v] start", ver, conf.Conf.Env)
 	// register discovery
 	dis := naming.New(conf.Conf.Discovery)
@@ -74,7 +74,6 @@ func main() {
 			rpcSrv.GracefulStop()
 			srv.Close()
 			log.Infof("goim-comet [version: %s] exit", ver)
-			log.Flush()
 			return
 		case syscall.SIGHUP:
 		default:

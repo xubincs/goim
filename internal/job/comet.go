@@ -11,7 +11,7 @@ import (
 	comet "github.com/Terry-Mao/goim/api/comet/grpc"
 	"github.com/Terry-Mao/goim/internal/job/conf"
 
-	log "github.com/golang/glog"
+	"github.com/Terry-Mao/goim/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 )

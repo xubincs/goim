@@ -17,7 +17,7 @@ import (
 	"github.com/Terry-Mao/goim/internal/logic/http"
 	"github.com/Terry-Mao/goim/internal/logic/model"
 	"github.com/Terry-Mao/goim/pkg/ip"
-	log "github.com/golang/glog"
+	"github.com/Terry-Mao/goim/log"
 )
 
 const (
@@ -54,7 +54,6 @@ func main() {
 			httpSrv.Close()
 			rpcSrv.GracefulStop()
 			log.Infof("goim-logic [version: %s] exit", ver)
-			log.Flush()
 			return
 		case syscall.SIGHUP:
 		default:

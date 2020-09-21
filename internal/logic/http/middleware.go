@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	log "github.com/golang/glog"
+	"github.com/Terry-Mao/goim/log"
 )
 
 func loggerHandler(c *gin.Context) {

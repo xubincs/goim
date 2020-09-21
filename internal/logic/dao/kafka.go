@@ -6,7 +6,7 @@ import (
 
 	pb "github.com/Terry-Mao/goim/api/logic/grpc"
 	"github.com/gogo/protobuf/proto"
-	log "github.com/golang/glog"
+	"github.com/Terry-Mao/goim/log"
 	sarama "gopkg.in/Shopify/sarama.v1"
 )
 

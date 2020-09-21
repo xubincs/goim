@@ -9,7 +9,7 @@ import (
 	"github.com/Terry-Mao/goim/internal/logic/dao"
 	"github.com/Terry-Mao/goim/internal/logic/model"
 	"github.com/bilibili/discovery/naming"
-	log "github.com/golang/glog"
+	"github.com/Terry-Mao/goim/log"
 )
 
 const (
@@ -104,7 +104,7 @@ func (l *Logic) newNodes(res naming.Resolver) {
 				}
 				offline, err := strconv.ParseBool(ins.Metadata[model.MetaOffline])
 				if err != nil || offline {
-					log.Warningf("strconv.ParseBool(offline:%t) error(%v)", offline, err)
+					log.Warn("strconv.ParseBool(offline:%t) error(%v)", offline, err)
 					continue
 				}
 				conns, err := strconv.ParseInt(ins.Metadata[model.MetaConnCount], 10, 32)

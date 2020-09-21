@@ -11,7 +11,7 @@ import (
 	"github.com/Terry-Mao/goim/internal/job/conf"
 
 	resolver "github.com/bilibili/discovery/naming/grpc"
-	log "github.com/golang/glog"
+	"github.com/Terry-Mao/goim/log"
 )
 
 var (
@@ -40,7 +40,6 @@ func main() {
 		case syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT:
 			j.Close()
 			log.Infof("goim-job [version: %s] exit", ver)
-			log.Flush()
 			return
 		case syscall.SIGHUP:
 		default:

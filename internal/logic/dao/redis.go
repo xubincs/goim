@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/Terry-Mao/goim/internal/logic/model"
-	log "github.com/golang/glog"
+	"github.com/Terry-Mao/goim/log"
 	"github.com/gomodule/redigo/redis"
 
 	"github.com/zhenjl/cityhash"

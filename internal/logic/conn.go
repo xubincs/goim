@@ -7,7 +7,7 @@ import (
 
 	"github.com/Terry-Mao/goim/api/comet/grpc"
 	"github.com/Terry-Mao/goim/internal/logic/model"
-	log "github.com/golang/glog"
+	"github.com/Terry-Mao/goim/log"
 	"github.com/google/uuid"
 )
 

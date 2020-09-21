@@ -7,7 +7,7 @@ import (
 	model "github.com/Terry-Mao/goim/api/comet/grpc"
 	logic "github.com/Terry-Mao/goim/api/logic/grpc"
 	"github.com/Terry-Mao/goim/pkg/strings"
-	log "github.com/golang/glog"
+	"github.com/Terry-Mao/goim/log"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/encoding/gzip"

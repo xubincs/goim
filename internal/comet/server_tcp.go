@@ -8,11 +8,10 @@ import (
 	"time"
 
 	"github.com/Terry-Mao/goim/api/comet/grpc"
-	"github.com/Terry-Mao/goim/internal/comet/conf"
+	"github.com/Terry-Mao/goim/log"
 	"github.com/Terry-Mao/goim/pkg/bufio"
 	"github.com/Terry-Mao/goim/pkg/bytes"
 	xtime "github.com/Terry-Mao/goim/pkg/time"
-	log "github.com/golang/glog"
 )
 
 const (
@@ -88,9 +87,8 @@ func serveTCP(s *Server, conn *net.TCPConn, r int) {
 		lAddr = conn.LocalAddr().String()
 		rAddr = conn.RemoteAddr().String()
 	)
-	if conf.Conf.Debug {
-		log.Infof("start tcp serve \"%s\" with \"%s\"", lAddr, rAddr)
-	}
+
+	log.Debugf("start tcp serve \"%s\" with \"%s\"", lAddr, rAddr)
 	s.ServeTCP(conn, rp, wp, tr)
 }
 
@@ -130,9 +128,7 @@ func (s *Server) ServeTCP(conn *net.TCPConn, rp, wp *bytes.Pool, tr *xtime.Timer
 			ch.Watch(accepts...)
 			b = s.Bucket(ch.Key)
 			err = b.Put(rid, ch)
-			if conf.Conf.Debug {
-				log.Infof("tcp connnected key:%s mid:%d proto:%+v", ch.Key, ch.Mid, p)
-			}
+			log.Debugf("tcp connnected key:%s mid:%d proto:%+v", ch.Key, ch.Mid, p)
 		}
 	}
 	step = 2
@@ -177,9 +173,7 @@ func (s *Server) ServeTCP(conn *net.TCPConn, rp, wp *bytes.Pool, tr *xtime.Timer
 					lastHb = now
 				}
 			}
-			if conf.Conf.Debug {
-				log.Infof("tcp heartbeat receive key:%s, mid:%d", ch.Key, ch.Mid)
-			}
+			log.Debugf("tcp heartbeat receive key:%s, mid:%d", ch.Key, ch.Mid)
 			step++
 		} else {
 			if err = s.Operate(ctx, p, ch, b); err != nil {
@@ -212,9 +206,7 @@ func (s *Server) ServeTCP(conn *net.TCPConn, rp, wp *bytes.Pool, tr *xtime.Timer
 	if white {
 		whitelist.Printf("key: %s mid: %d disconnect error(%v)\n", ch.Key, ch.Mid, err)
 	}
-	if conf.Conf.Debug {
-		log.Infof("tcp disconnected key: %s mid: %d", ch.Key, ch.Mid)
-	}
+	log.Debugf("tcp disconnected key: %s mid: %d", ch.Key, ch.Mid)
 }
 
 // dispatch accepts connections on the listener and serves requests
@@ -227,9 +219,7 @@ func (s *Server) dispatchTCP(conn *net.TCPConn, wr *bufio.Writer, wp *bytes.Pool
 		online int32
 		white  = whitelist.Contains(ch.Mid)
 	)
-	if conf.Conf.Debug {
-		log.Infof("key: %s start dispatch tcp goroutine", ch.Key)
-	}
+	log.Debugf("key: %s start dispatch tcp goroutine", ch.Key)
 	for {
 		if white {
 			whitelist.Printf("key: %s wait proto ready\n", ch.Key)
@@ -238,17 +228,13 @@ func (s *Server) dispatchTCP(conn *net.TCPConn, wr *bufio.Writer, wp *bytes.Pool
 		if white {
 			whitelist.Printf("key: %s proto ready\n", ch.Key)
 		}
-		if conf.Conf.Debug {
-			log.Infof("key:%s dispatch msg:%v", ch.Key, *p)
-		}
+		log.Debugf("key:%s dispatch msg:%v", ch.Key, *p)
 		switch p {
 		case grpc.ProtoFinish:
 			if white {
 				whitelist.Printf("key: %s receive proto finish\n", ch.Key)
 			}
-			if conf.Conf.Debug {
-				log.Infof("key: %s wakeup exit dispatch goroutine", ch.Key)
-			}
+			log.Debugf("key: %s wakeup exit dispatch goroutine", ch.Key)
 			finish = true
 			goto failed
 		case grpc.ProtoReady:
@@ -289,9 +275,7 @@ func (s *Server) dispatchTCP(conn *net.TCPConn, wr *bufio.Writer, wp *bytes.Pool
 			if white {
 				whitelist.Printf("key: %s write server proto%v\n", ch.Key, p)
 			}
-			if conf.Conf.Debug {
-				log.Infof("tcp sent a message key:%s mid:%d proto:%+v", ch.Key, ch.Mid, p)
-			}
+			log.Debugf("tcp sent a message key:%s mid:%d proto:%+v", ch.Key, ch.Mid, p)
 		}
 		if white {
 			whitelist.Printf("key: %s start flush \n", ch.Key)
@@ -317,9 +301,7 @@ failed:
 	for !finish {
 		finish = (ch.Ready() == grpc.ProtoFinish)
 	}
-	if conf.Conf.Debug {
-		log.Infof("key: %s dispatch goroutine exit", ch.Key)
-	}
+	log.Debugf("key: %s dispatch goroutine exit", ch.Key)
 }
 
 // auth for goim handshake with client, use rsa & aes.

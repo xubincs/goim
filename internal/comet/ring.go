@@ -2,9 +2,8 @@ package comet
 
 import (
 	"github.com/Terry-Mao/goim/api/comet/grpc"
-	"github.com/Terry-Mao/goim/internal/comet/conf"
 	"github.com/Terry-Mao/goim/internal/comet/errors"
-	log "github.com/golang/glog"
+	"github.com/Terry-Mao/goim/log"
 )
 
 // Ring ring proto buffer.
@@ -57,9 +56,7 @@ func (r *Ring) Get() (proto *grpc.Proto, err error) {
 // GetAdv incr read index.
 func (r *Ring) GetAdv() {
 	r.rp++
-	if conf.Conf.Debug {
-		log.Infof("ring rp: %d, idx: %d", r.rp, r.rp&r.mask)
-	}
+	log.Debugf("ring rp: %d, idx: %d", r.rp, r.rp&r.mask)
 }
 
 // Set get a proto to write.
@@ -74,9 +71,7 @@ func (r *Ring) Set() (proto *grpc.Proto, err error) {
 // SetAdv incr write index.
 func (r *Ring) SetAdv() {
 	r.wp++
-	if conf.Conf.Debug {
-		log.Infof("ring wp: %d, idx: %d", r.wp, r.wp&r.mask)
-	}
+	log.Debugf("ring wp: %d, idx: %d", r.wp, r.wp&r.mask)
 }
 
 // Reset reset ring.

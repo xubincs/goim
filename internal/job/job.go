@@ -12,7 +12,7 @@ import (
 	"github.com/gogo/protobuf/proto"
 
 	cluster "github.com/bsm/sarama-cluster"
-	log "github.com/golang/glog"
+	"github.com/Terry-Mao/goim/log"
 )
 
 // Job is push job.

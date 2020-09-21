@@ -5,7 +5,7 @@ import (
 
 	"github.com/Terry-Mao/goim/internal/logic/model"
 
-	log "github.com/golang/glog"
+	"github.com/Terry-Mao/goim/log"
 )
 
 // PushKeys push a message by keys.
@@ -38,7 +38,7 @@ func (l *Logic) PushMids(c context.Context, op int32, mids []int64, msg []byte) 
 	keys := make(map[string][]string)
 	for key, server := range keyServers {
 		if key == "" || server == "" {
-			log.Warningf("push key:%s server:%s is empty", key, server)
+			log.Warnf("push key:%s server:%s is empty", key, server)
 			continue
 		}
 		keys[server] = append(keys[server], key)
